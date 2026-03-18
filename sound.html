@@ -169,7 +169,6 @@
 <footer>
   <a href="legal.html">Legal Notice</a>
   <a href="privacy.html">Privacy Policy</a>
-  <a href="https://velvetyne.fr/" target="_blank" rel="noopener">Font: Velvetyne</a>
 </footer>
 
 <script>
@@ -205,22 +204,47 @@
     cursor.style.top  = e.clientY + 'px';
   });
 
-  // Fluid floating — each element drifts independently
-  const floaters = [
-    { el: document.querySelector('.back'),      ax:  5, ay:  7, fx: 0.00021, fy: 0.00029, px: 0.0, py: 1.1 },
-    { el: document.querySelector('h1'),         ax: 14, ay: 10, fx: 0.00016, fy: 0.00021, px: 0.7, py: 2.4 },
-    { el: document.querySelector('p'),          ax:  9, ay: 13, fx: 0.00027, fy: 0.00018, px: 1.5, py: 0.3 },
-    { el: document.querySelector('.link-line'), ax:  7, ay:  9, fx: 0.00019, fy: 0.00025, px: 2.2, py: 3.1 },
-    { el: document.querySelector('footer'),     ax:  4, ay:  5, fx: 0.00023, fy: 0.00031, px: 3.5, py: 1.8 },
-  ];
+  // Per-character fluid floating
+  const allChars = [];
 
-  (function floatLoop(t) {
-    for (const f of floaters) {
-      const x = f.ax * Math.sin(t * f.fx + f.px);
-      const y = f.ay * Math.sin(t * f.fy + f.py);
-      f.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+  function splitIntoChars(el, ampX, ampY) {
+    const original = el.innerHTML;
+    const text = el.textContent;
+    el.innerHTML = '';
+    for (const ch of text) {
+      if (ch === ' ') {
+        el.appendChild(document.createTextNode(' '));
+      } else {
+        const s = document.createElement('span');
+        s.textContent = ch;
+        s.style.display = 'inline-block';
+        el.appendChild(s);
+        allChars.push({
+          el: s,
+          ax: ampX * (0.6 + Math.random() * 0.8),
+          ay: ampY * (0.6 + Math.random() * 0.8),
+          fx: 0.00014 + Math.random() * 0.00024,
+          fy: 0.00014 + Math.random() * 0.00024,
+          px: Math.random() * Math.PI * 2,
+          py: Math.random() * Math.PI * 2,
+        });
+      }
     }
-    requestAnimationFrame(floatLoop);
+  }
+
+  splitIntoChars(document.querySelector('.back'),      3,  4);
+  splitIntoChars(document.querySelector('h1'),        10, 12);
+  splitIntoChars(document.querySelector('p'),          3,  5);
+  splitIntoChars(document.querySelector('.link-line'), 4,  6);
+  document.querySelectorAll('footer a').forEach(a => splitIntoChars(a, 2, 3));
+
+  (function charLoop(t) {
+    for (const c of allChars) {
+      const x = c.ax * Math.sin(t * c.fx + c.px);
+      const y = c.ay * Math.sin(t * c.fy + c.py);
+      c.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+    }
+    requestAnimationFrame(charLoop);
   })();
 </script>
 </body>
