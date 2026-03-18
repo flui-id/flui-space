@@ -10,6 +10,32 @@
        url('fonts/PicNic.woff')  format('woff');
 }
 
+/* Avara — Raphaël Bastide, distributed by velvetyne.fr */
+@font-face {
+  font-family: 'Avara';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('webfonts/Bold/Avara-Bold.woff2') format('woff2'),
+       url('webfonts/Bold/Avara-Bold.woff')  format('woff');
+}
+@font-face {
+  font-family: 'Avara';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('webfonts/BoldItalic/Avara-BoldItalic.woff2') format('woff2'),
+       url('webfonts/BoldItalic/Avara-BoldItalic.woff')  format('woff');
+}
+@font-face {
+  font-family: 'Avara';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('webfonts/Black/Avara-Black.woff2') format('woff2'),
+       url('webfonts/Black/Avara-Black.woff')  format('woff');
+}
+
 /* CirrusCumulus — Clara Sambot, distributed by velvetyne.fr */
 @font-face {
   font-family: 'CirrusCumulus';

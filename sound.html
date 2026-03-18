@@ -17,39 +17,29 @@
 
     body {
       background: var(--bg);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
       color: var(--text);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
-      line-height: 1.85;
+      font-family: 'Avara', serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.75;
       min-height: 100vh;
       padding: clamp(32px, 7vw, 80px) clamp(24px, 7vw, 88px);
       cursor: none;
-      max-width: 680px;
+      max-width: 620px;
+      margin: 0 auto;
       overflow-x: hidden;
+      text-align: center;
     }
 
-    /* Dark overlay over the background image */
-    body::before {
-      content: '';
+    /* Fractal canvas background */
+    #fractal-bg {
       position: fixed;
       inset: 0;
-      background: rgba(4,8,15,.88);
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
     }
 
-    #cursor, .back, h1, p, .link-line, footer { position: relative; z-index: 1; }
-
-    /* Fallback gradient if image fails */
-    body {
-      background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(10,20,40,.9) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(20,10,30,.8) 0%, transparent 50%);
-    }
-
+    /* Scanlines */
     body::after {
       content: '';
       position: fixed;
@@ -61,6 +51,11 @@
       );
       pointer-events: none;
       z-index: 900;
+    }
+
+    #cursor, .back, h1, p, .link-line, footer {
+      position: relative;
+      z-index: 1;
     }
 
     #cursor {
@@ -82,7 +77,9 @@
 
     .back {
       display: block;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
+      font-weight: 400;
       color: var(--dim);
       text-decoration: none;
       letter-spacing: .15em;
@@ -101,16 +98,12 @@
     }
 
     p {
-      font-weight: 300;
-      color: rgba(194,208,232,.78);
+      font-family: 'Avara', serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: rgba(194,208,232,.82);
       margin-bottom: 20px;
-    }
-
-    p.note {
-      font-style: italic;
-      color: var(--dim);
-      font-size: 12px;
-      margin-top: 8px;
+      line-height: 1.75;
     }
 
     .link-line {
@@ -119,7 +112,9 @@
       color: var(--text);
       text-decoration: none;
       cursor: none;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
+      font-weight: 400;
       letter-spacing: .08em;
     }
     .link-line::before { content: '> '; color: var(--dim); }
@@ -130,9 +125,11 @@
       padding-top: 20px;
       border-top: 1px solid rgba(194,208,232,.08);
       display: flex;
+      justify-content: center;
       gap: 24px;
     }
     footer a {
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       letter-spacing: .12em;
       color: rgba(194,208,232,.25);
@@ -140,15 +137,11 @@
       cursor: none;
     }
     footer a:hover { color: rgba(194,208,232,.6); }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
-    }
   </style>
 </head>
 <body>
 
+<canvas id="fractal-bg"></canvas>
 <div id="cursor"></div>
 
 <a class="back" href="index.html" id="back">← flui.</a>
@@ -172,28 +165,44 @@
 </footer>
 
 <script>
-  // Random abstract/fluid background from Unsplash (changes on each reload)
-  // Curated night / low-key photography from Unsplash (rotates on each reload)
-  const photos = [
-    'photo-1504700610630-ac6aba3536d3',
-    'photo-1519681393784-d120267933ba',
-    'photo-1472162072942-cd5147eb3902',
-    'photo-1531306728370-e2ebd9d7bb99',
-    'photo-1444703686981-a3abbc4d4fe3',
-    'photo-1500534314209-a25ddb2bd429',
-    'photo-1518066000714-58c45f1a2c0a',
-    'photo-1462331940025-496dfbfc7564',
-    'photo-1419242902214-272b3f66ee7a',
-    'photo-1475070929565-c985b496cb9f',
-    'photo-1508739773434-c26b3d09e071',
-    'photo-1451187580459-43490279c0fa',
-  ];
-  const id  = photos[Math.floor(Math.random() * photos.length)];
-  const url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1920&q=80`;
-  const img = new Image();
-  img.onload = () => { document.body.style.backgroundImage = `url('${url}')`; };
-  img.src = url;
+  /* ── Fractal branching background ── */
+  const canvas = document.getElementById('fractal-bg');
+  const ctx    = canvas.getContext('2d');
 
+  function branch(x, y, angle, len, depth) {
+    if (depth === 0 || len < 1.5) return;
+    const ex = x + Math.cos(angle) * len;
+    const ey = y + Math.sin(angle) * len;
+    ctx.lineWidth = Math.max(0.2, depth * 0.12);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(ex, ey);
+    ctx.stroke();
+    const v = Math.sin(depth * 1.9 + x * 0.004) * 0.07;
+    branch(ex, ey, angle - (0.38 + v), len * 0.68, depth - 1);
+    branch(ex, ey, angle + (0.38 + v), len * 0.68, depth - 1);
+    if (depth > 4) branch(ex, ey, angle + (0.12 + v), len * 0.52, depth - 3);
+  }
+
+  function draw() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Central tree
+    ctx.strokeStyle = 'rgba(194,208,232,0.055)';
+    branch(canvas.width * 0.5, canvas.height * 1.05, -Math.PI / 2, canvas.height * 0.28, 10);
+
+    // Side accents
+    ctx.strokeStyle = 'rgba(194,208,232,0.03)';
+    branch(canvas.width * 0.08, canvas.height * 0.72, -Math.PI * 0.28, canvas.height * 0.17, 8);
+    branch(canvas.width * 0.92, canvas.height * 0.55,  Math.PI * 1.12, canvas.height * 0.16, 8);
+  }
+
+  window.addEventListener('resize', draw);
+  draw();
+
+  /* ── Cursor ── */
   const cursor = document.getElementById('cursor');
   document.querySelectorAll('a').forEach(a => {
     a.addEventListener('mouseenter', () => cursor.classList.add('on-link'));
@@ -204,11 +213,10 @@
     cursor.style.top  = e.clientY + 'px';
   });
 
-  // Per-character fluid floating
+  /* ── Per-character fluid floating ── */
   const allChars = [];
 
   function splitIntoChars(el, ampX, ampY) {
-    const original = el.innerHTML;
     const text = el.textContent;
     el.innerHTML = '';
     for (const ch of text) {
