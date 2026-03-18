@@ -145,11 +145,29 @@
       cursor: none;
     }
     footer a:hover { color: rgba(194,208,232,.6); }
+
+    /* Neon glow */
+    #neon-glow {
+      position: fixed;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(210,255,10,.18) 0%,
+        rgba(180,255,0,.08) 35%,
+        transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 400;
+      mix-blend-mode: screen;
+      transition: opacity .6s ease;
+    }
   </style>
 </head>
 <body>
 
 <canvas id="fractal-bg"></canvas>
+<div id="neon-glow"></div>
 <div id="cursor"></div>
 
 <a class="back" href="index.html" id="back">← flui.space</a>
@@ -209,6 +227,36 @@
 
   window.addEventListener('resize', draw);
   draw();
+
+  /* ── Neon glow ── */
+  const glow = document.getElementById('neon-glow');
+  let glowX = window.innerWidth * 0.5;
+  let glowY = window.innerHeight * 0.45;
+  let targetX = glowX, targetY = glowY;
+  let hasPointer = false;
+
+  window.addEventListener('mousemove', e => {
+    targetX = e.clientX; targetY = e.clientY; hasPointer = true;
+  });
+  window.addEventListener('touchstart', e => {
+    targetX = e.touches[0].clientX; targetY = e.touches[0].clientY; hasPointer = true;
+  }, { passive: true });
+  window.addEventListener('touchmove', e => {
+    targetX = e.touches[0].clientX; targetY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', () => { hasPointer = false; });
+
+  (function glowLoop(t) {
+    if (!hasPointer) {
+      targetX = window.innerWidth  * (0.5 + Math.sin(t * 0.00028) * 0.35);
+      targetY = window.innerHeight * (0.48 + Math.cos(t * 0.00021) * 0.28);
+    }
+    glowX += (targetX - glowX) * 0.06;
+    glowY += (targetY - glowY) * 0.06;
+    glow.style.left = glowX + 'px';
+    glow.style.top  = glowY + 'px';
+    requestAnimationFrame(glowLoop);
+  })();
 
   /* ── Cursor ── */
   const cursor = document.getElementById('cursor');
