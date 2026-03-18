@@ -73,6 +73,9 @@
 
     header {
       margin-bottom: clamp(40px, 8vh, 80px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .back {
@@ -88,13 +91,34 @@
     }
     .back:hover { color: var(--text); }
 
+    .logo-block {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
     h1 {
       font-family: 'Vagra', sans-serif;
-      font-size: clamp(48px, 11vw, 120px);
+      font-size: clamp(80px, 20vw, 220px);
       font-weight: 400;
       letter-spacing: -.01em;
       line-height: 1;
       color: var(--copper);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      mix-blend-mode: multiply;
+      animation: logo-pulse 2.8s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes logo-pulse {
+      0%, 100% { opacity: 0.55; }
+      50%       { opacity: 1; }
     }
 
     .tagline {
@@ -253,9 +277,8 @@
 
 <header>
   <a class="back" href="/">← flui.space</a>
-  <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;">
-    <h1>flui</h1>
-    <svg id="logo" width="120" height="120" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="cursor:none;transform-origin:center;flex-shrink:0;">
+  <div class="logo-block">
+    <svg id="logo" width="200" height="200" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="cursor:none;transform-origin:center;flex-shrink:0;">
       <g opacity="0.18">
         <line x1="12" y1="8" x2="12" y2="40" stroke="#1A1510" stroke-width="0.4"/>
         <line x1="24" y1="8" x2="24" y2="40" stroke="#1A1510" stroke-width="0.4"/>
@@ -284,6 +307,7 @@
       </g>
       <circle cx="24" cy="24" r="1.8" fill="#C87533" opacity="0.5" style="animation:pulse 3s ease-in-out infinite"/>
     </svg>
+    <h1>flui</h1>
   </div>
   <div class="tagline">Circular Systems for lasting change</div>
 </header>

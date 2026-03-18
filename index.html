@@ -50,18 +50,17 @@
 
     /* ── Brand blocks ── */
     .brand-block {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: clamp(2px, 0.5vw, 6px);
       position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       z-index: 2;
       user-select: none;
     }
 
     .brand-logo {
-      width:  clamp(64px, 14vw, 120px);
-      height: clamp(64px, 14vw, 120px);
+      width:  clamp(80px, 18vw, 160px);
+      height: clamp(80px, 18vw, 160px);
     }
 
     /* ── Word labels ── */
@@ -75,10 +74,22 @@
     .half--day .word {
       font-family: 'Vagra', sans-serif;
       font-weight: 400;
-      font-size: clamp(40px, 10vw, 100px);
+      font-size: clamp(64px, 16vw, 160px);
       letter-spacing: -0.01em;
       color: #C87533;
-      opacity: 1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      mix-blend-mode: multiply;
+      animation: logo-pulse 2.8s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    @keyframes logo-pulse {
+      0%, 100% { opacity: 0.55; }
+      50%       { opacity: 1; }
     }
 
     .half--night .word {
@@ -191,7 +202,6 @@
 
 <div class="half half--day" id="sys">
   <div class="brand-block">
-    <span class="word" id="lbl-systems">flui</span>
     <svg class="brand-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
       <g opacity="0.18">
         <line x1="12" y1="8" x2="12" y2="40" stroke="#1A1510" stroke-width="0.4"/>
@@ -221,6 +231,7 @@
       </g>
       <circle cx="24" cy="24" r="1.8" fill="#C87533" opacity="0.5" style="animation:pulse 3s ease-in-out infinite"/>
     </svg>
+    <span class="word" id="lbl-systems">flui</span>
   </div>
 </div>
 
