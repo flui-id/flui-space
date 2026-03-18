@@ -53,6 +53,13 @@
   font-display: swap;
   src: url('WOFF/bianzhidai-Cube.woff') format('woff');
 }
+@font-face {
+  font-family: 'BianZhiDaiGrid';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('WOFF/bianzhidai-Grid.woff') format('woff');
+}
 
 @font-face {
   font-family: 'Cormorant Garamond';
