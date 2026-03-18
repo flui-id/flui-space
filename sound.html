@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound — flui.</title>
+  <title>fluid identities — flui.space</title>
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="fonts.css">
   <style>
@@ -24,11 +24,18 @@
       line-height: 1.75;
       min-height: 100vh;
       padding: clamp(32px, 7vw, 80px) clamp(24px, 7vw, 88px);
-      cursor: none;
       max-width: 620px;
       margin: 0 auto;
       overflow-x: hidden;
-      text-align: center;
+      text-align: left;
+    }
+
+    @media (pointer: fine) {
+      body { cursor: none; }
+    }
+    @media (pointer: coarse) {
+      #cursor { display: none; }
+      body, a { cursor: auto; }
     }
 
     /* Fractal canvas background */

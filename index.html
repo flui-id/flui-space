@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>flui.</title>
+  <title>flui.space</title>
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="fonts.css">
   <style>
@@ -73,12 +73,12 @@
     }
 
     .half--day .word {
-      font-family: 'CirrusCumulus', sans-serif;
+      font-family: 'BianZhiDai', sans-serif;
       font-weight: 400;
       font-size: clamp(30px, 8vw, 82px);
       letter-spacing: -0.01em;
-      color: #1A1510;
-      opacity: .78;
+      color: #C87533;
+      opacity: 1;
     }
 
     .half--night .word {
@@ -141,7 +141,7 @@
       z-index: 200;
     }
     footer a {
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Avara', serif;
       font-size: 9px;
       letter-spacing: .12em;
       color: rgba(160,160,154,.28);
@@ -149,6 +149,10 @@
       transition: color .3s;
     }
     footer a:hover { color: rgba(160,160,154,.7); }
+
+    @media (pointer: coarse) {
+      #cursor { display: none; }
+    }
 
     /* ── Desktop cursor (fine pointer only) ── */
     @media (pointer: fine) {

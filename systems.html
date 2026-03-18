@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Systems — flui.</title>
+  <title>FLUI — flui.space</title>
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="fonts.css">
   <style>
@@ -27,7 +27,14 @@
       padding: clamp(32px, 6vw, 72px) clamp(24px, 6vw, 80px);
       max-width: 660px;
       margin: 0 auto;
-      cursor: none;
+    }
+
+    @media (pointer: fine) {
+      body { cursor: none; }
+    }
+    @media (pointer: coarse) {
+      #cursor { display: none; }
+      body, a { cursor: auto; }
     }
 
     /* Background layer */
@@ -43,7 +50,7 @@
     #page {
       position: relative;
       z-index: 1;
-      text-align: center;
+      text-align: left;
     }
 
     /* Custom cursor */
@@ -66,7 +73,6 @@
 
     header {
       margin-bottom: clamp(40px, 8vh, 80px);
-      text-align: center;
     }
 
     .back {
@@ -83,11 +89,12 @@
     .back:hover { color: var(--text); }
 
     h1 {
-      font-family: 'CirrusCumulus', sans-serif;
+      font-family: 'BianZhiDai', sans-serif;
       font-size: clamp(36px, 9vw, 108px);
       font-weight: 400;
       letter-spacing: -.01em;
       line-height: 1;
+      color: var(--copper);
     }
 
     .tagline {
@@ -118,12 +125,12 @@
       margin-bottom: 20px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 12px;
     }
 
     .label-icon {
-      width: 28px; height: 28px;
+      width: 40px; height: 40px;
       opacity: 0.35;
     }
     .label-icon path, .label-icon circle, .label-icon line {
@@ -161,7 +168,7 @@
     .cmd-list {
       list-style: none;
       margin-top: 12px;
-      text-align: center;
+      text-align: left;
     }
     .cmd-list li { margin-bottom: 8px; }
     .cmd-list a {
