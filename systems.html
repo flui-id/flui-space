@@ -20,12 +20,12 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Avara', serif;
-      font-size: 16px;
+      font-size: 19px;
       font-weight: 700;
-      line-height: 1.75;
+      line-height: 1.7;
       min-height: 100vh;
       padding: clamp(32px, 6vw, 72px) clamp(24px, 6vw, 80px);
-      max-width: 620px;
+      max-width: 660px;
       margin: 0 auto;
       cursor: none;
     }
@@ -71,33 +71,33 @@
 
     .back {
       display: inline-block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
+      font-family: 'Avara', serif;
+      font-size: 14px;
+      font-weight: 700;
       color: var(--dim);
       text-decoration: none;
-      letter-spacing: .15em;
+      letter-spacing: .05em;
       margin-bottom: 40px;
       cursor: none;
-      font-weight: 400;
     }
     .back:hover { color: var(--text); }
 
     h1 {
       font-family: 'CirrusCumulus', sans-serif;
-      font-size: clamp(28px, 6.5vw, 80px);
+      font-size: clamp(36px, 9vw, 108px);
       font-weight: 400;
       letter-spacing: -.01em;
       line-height: 1;
-      margin-bottom: 8px;
     }
 
     .tagline {
       font-family: 'Avara', serif;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 900;
       color: rgba(26,21,16,.55);
-      letter-spacing: .12em;
+      letter-spacing: .1em;
       text-transform: uppercase;
+      margin-top: 12px;
     }
 
     hr {
@@ -109,13 +109,13 @@
     section { margin-bottom: clamp(32px, 6vh, 56px); }
 
     .label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: .25em;
+      font-family: 'Avara', serif;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .2em;
       color: var(--dim);
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -139,12 +139,12 @@
     p {
       font-family: 'Avara', serif;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 19px;
       color: rgba(26,21,16,.75);
       max-width: 100%;
-      line-height: 1.75;
+      line-height: 1.7;
     }
-    p + p { margin-top: 14px; }
+    p + p { margin-top: 18px; }
 
     p em {
       font-style: italic;
@@ -165,9 +165,9 @@
     }
     .cmd-list li { margin-bottom: 8px; }
     .cmd-list a {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      font-weight: 400;
+      font-family: 'Avara', serif;
+      font-size: 16px;
+      font-weight: 700;
       color: var(--text);
       text-decoration: none;
       cursor: none;
@@ -177,11 +177,11 @@
 
     .work-desc {
       font-family: 'Avara', serif;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
       font-style: italic;
       color: var(--dim);
-      margin-top: 6px;
+      margin-top: 8px;
       line-height: 1.6;
     }
 
@@ -194,9 +194,10 @@
       gap: 24px;
     }
     footer a {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .12em;
+      font-family: 'Avara', serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
       color: rgba(26,21,16,.25);
       text-decoration: none;
       cursor: none;
@@ -245,8 +246,8 @@
 
 <header>
   <a class="back" href="/">← flui.</a>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:8px;">
-    <svg id="logo" width="52" height="52" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="cursor:none;transform-origin:center;">
+  <div style="display:inline-flex;flex-direction:row;align-items:center;gap:24px;margin-bottom:16px;">
+    <svg id="logo" width="80" height="80" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="cursor:none;transform-origin:center;flex-shrink:0;">
       <g opacity="0.18">
         <line x1="12" y1="8" x2="12" y2="40" stroke="#1A1510" stroke-width="0.4"/>
         <line x1="24" y1="8" x2="24" y2="40" stroke="#1A1510" stroke-width="0.4"/>
@@ -305,13 +306,13 @@
   </div>
   <p>
     Porto-based. Together with a friend, I'm building a permaculture quinta in
-    Cinfães, northern Portugal — abandoned land becoming a regenerative system
-    of crops, fruit trees, and restored buildings. The thread: connecting natural
+    Cinfães, northern Portugal. Abandoned land turning into a regenerative system
+    of crops, fruit trees, and restored buildings. The goal is to connect natural
     wine back to Porto's community through care rather than scale.
   </p>
   <p>
-    Also: building communications infrastructure for Colégio Alemão do Porto's
-    125th anniversary — using the same circular thinking.
+    Also building communications for Colégio Alemão do Porto's 125th anniversary,
+    using the same thinking.
   </p>
   <ul class="cmd-list" style="margin-top:16px;">
     <li><a href="https://www.instagram.com/aflorestamos/" target="_blank" rel="noopener">@aflorestamos — follow the project</a></li>
@@ -345,9 +346,9 @@
     // approach
   </div>
   <p>
-    Nothing extracted, nothing wasted. The logic of a healthy forest —
-    circular flows, local feedback, no permanent centres — is what I try
-    to bring to communication, design, and institutional work.
+    Nothing extracted, nothing wasted. The logic of a healthy forest:
+    circular flows, local feedback, no permanent centres. That is what I
+    try to bring to communication, design, and institutional work.
   </p>
 </section>
 
@@ -377,8 +378,9 @@
     // background
   </div>
   <p>
-    A decade working across Munich and Porto at the intersection of
-    research, systems thinking, and design. The full picture is on LinkedIn.
+    About a decade working across Munich and Porto, at the intersection of
+    research, systems thinking, and design. If you want to know more,
+    LinkedIn has the full picture.
   </p>
   <ul class="cmd-list" style="margin-top:16px;">
     <li><a href="https://www.linkedin.com/in/jonas-brosch-611693129/" target="_blank" rel="noopener">LinkedIn — full background</a></li>
@@ -407,21 +409,21 @@
     </svg>
     // work
   </div>
-  <p>Interested in working together? — <a href="mailto:ola@flui.space">ola@flui.space</a></p>
-  <p style="margin-top:18px;"><em>Selected:</em></p>
+  <p>Want to work together? Write to <a href="mailto:ola@flui.space">ola@flui.space</a></p>
+  <p style="margin-top:18px;"><em>Some things I have worked on:</em></p>
   <ul class="cmd-list" style="margin-top:12px;">
     <li>
       <a href="https://dsporto.de" target="_blank" rel="noopener">dsporto.de</a>
-      <div class="work-desc">Communications infrastructure for a school's 125th anniversary. (in progress)</div>
+      <div class="work-desc">Communications for a German school in Porto through their 125th anniversary. In progress.</div>
     </li>
     <li style="margin-top:14px;">
-      <a href="https://www.instagram.com/wittmann_brueder/" target="_blank" rel="noopener">@wittmann_brueder</a> — logo &nbsp;·&nbsp;
-      <a href="https://schauhi-films.de" target="_blank" rel="noopener">schauhi-films.de</a> — web
-      <div class="work-desc">Identity and web for a film team. Used to secure funding for a production and a TV series. Team named Top Newcomers in Bavarian Film.</div>
+      <a href="https://www.instagram.com/wittmann_brueder/" target="_blank" rel="noopener">@wittmann_brueder</a> / logo &nbsp;·&nbsp;
+      <a href="https://schauhi-films.de" target="_blank" rel="noopener">schauhi-films.de</a> / web
+      <div class="work-desc">Identity and web for a film team. Helped secure funding for a feature and a TV series. They were later named Top Newcomers in Bavarian Film.</div>
     </li>
     <li style="margin-top:14px;">
       <a href="https://familienwerk-tegernsee.de" target="_blank" rel="noopener">familienwerk-tegernsee.de</a>
-      <div class="work-desc">Rebrand and web — repositioning a family law practice into a consultancy focused on mediation.</div>
+      <div class="work-desc">Rebrand and web for a family law practice repositioning as a mediation-first consultancy.</div>
     </li>
   </ul>
 </section>
