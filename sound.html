@@ -35,12 +35,19 @@
       content: '';
       position: fixed;
       inset: 0;
-      background: rgba(4,8,15,.82);
+      background: rgba(4,8,15,.88);
       pointer-events: none;
       z-index: 0;
     }
 
     #cursor, .back, h1, p, .link-line, footer { position: relative; z-index: 1; }
+
+    /* Fallback gradient if image fails */
+    body {
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(10,20,40,.9) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(20,10,30,.8) 0%, transparent 50%);
+    }
 
     body::after {
       content: '';
@@ -84,15 +91,12 @@
     .back:hover { color: var(--text); }
 
     h1 {
-      font-size: clamp(32px, 7vw, 80px);
-      font-weight: 700;
-      letter-spacing: -.03em;
-      line-height: 1;
+      font-family: 'PicNic', serif;
+      font-weight: 400;
+      font-size: clamp(72px, 22vw, 240px);
+      letter-spacing: -0.01em;
+      line-height: 0.9;
       margin-bottom: clamp(28px, 5vh, 48px);
-    }
-    h1::after {
-      content: '_';
-      animation: blink 1.2s step-end infinite;
     }
 
     p {
@@ -148,29 +152,47 @@
 
 <a class="back" href="index.html" id="back">← flui.</a>
 
-<h1>flui:id</h1>
+<h1>fluid identities</h1>
 
 <p>
-  fluid identities is an ambient and sound design project shaped
-  by exploration of sonic worlds that find their shape in the
-  unforeseeable, striving for the organic heartbeat inside rigid
-  structures, defying gravity and oscillating between the synthetic
-  and the organic.
+  fluid identities is an ambient and sound design project
+  shaped by sonic worlds that find their form in the unforeseeable —
+  striving for the organic heartbeat inside rigid structures,
+  defying gravity, oscillating between the synthetic and the organic.
 </p>
 
 <a class="link-line" href="https://soundcloud.com/flui_id" target="_blank" rel="noopener" id="sc-link">
-  SoundCloud — flui:id
+  SoundCloud — fluid identities
 </a>
 
 <footer>
   <a href="legal.html">Legal Notice</a>
   <a href="privacy.html">Privacy Policy</a>
+  <a href="https://velvetyne.fr/" target="_blank" rel="noopener">Font: Velvetyne</a>
 </footer>
 
 <script>
   // Random abstract/fluid background from Unsplash (changes on each reload)
-  const url = `https://source.unsplash.com/random/1920x1080/?abstract,fluid,dark&t=${Date.now()}`;
-  document.body.style.backgroundImage = `url('${url}')`;
+  // Curated night / low-key photography from Unsplash (rotates on each reload)
+  const photos = [
+    'photo-1504700610630-ac6aba3536d3',
+    'photo-1519681393784-d120267933ba',
+    'photo-1472162072942-cd5147eb3902',
+    'photo-1531306728370-e2ebd9d7bb99',
+    'photo-1444703686981-a3abbc4d4fe3',
+    'photo-1500534314209-a25ddb2bd429',
+    'photo-1518066000714-58c45f1a2c0a',
+    'photo-1462331940025-496dfbfc7564',
+    'photo-1419242902214-272b3f66ee7a',
+    'photo-1475070929565-c985b496cb9f',
+    'photo-1508739773434-c26b3d09e071',
+    'photo-1451187580459-43490279c0fa',
+  ];
+  const id  = photos[Math.floor(Math.random() * photos.length)];
+  const url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1920&q=80`;
+  const img = new Image();
+  img.onload = () => { document.body.style.backgroundImage = `url('${url}')`; };
+  img.src = url;
 
   const cursor = document.getElementById('cursor');
   document.querySelectorAll('a').forEach(a => {

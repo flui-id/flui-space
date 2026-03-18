@@ -9,141 +9,167 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html { height: 100%; }
+
     body {
-      background: #e0d4b8; /* Tag/warm oben */
       height: 100vh;
+      height: 100dvh;
       overflow: hidden;
-      position: relative;
-    }
-    
-    /* Harter Übergang - untere Hälfte Nacht */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 50vh;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #04080f; /* Nacht/kalt unten */
-      z-index: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Scanlines */
-    body::after {
+    /* ── Two halves ── */
+    .half {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    .half--day   { background: #e0d4b8; }
+    .half--night { background: #04080f; }
+
+    /* Scanlines on night half */
+    .half--night::after {
       content: '';
-      position: fixed;
+      position: absolute;
       inset: 0;
       background: repeating-linear-gradient(
         0deg,
         transparent, transparent 2px,
-        rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px
+        rgba(0,0,0,.05) 2px, rgba(0,0,0,.05) 4px
       );
       pointer-events: none;
-      z-index: 900;
+      z-index: 1;
     }
 
-    /* Custom cursor (desktop only) */
+    /* ── Word labels ── */
+    .word {
+      font-size: clamp(56px, 16vw, 160px);
+      line-height: 1;
+      user-select: none;
+      position: relative;
+      z-index: 2;
+      transition: opacity .35s, transform .35s cubic-bezier(.34,1.56,.64,1);
+      will-change: transform;
+    }
+
+    .half--day .word {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #1A1510;
+      opacity: .72;
+    }
+
+    .half--night .word {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      color: #c2d0e8;
+      opacity: .72;
+    }
+
+    .half--day:hover   .word,
+    .half--day:active  .word  { opacity: 1; transform: scale(1.04); }
+    .half--night:hover  .word,
+    .half--night:active .word { opacity: 1; transform: scale(1.04); }
+
+    /* ── Touch ripple ── */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 3;
+      transform: scale(0);
+      opacity: 1;
+      animation: ripple .75s ease-out forwards;
+    }
+    .half--day   .ripple { background: rgba(26,21,16,.09); }
+    .half--night .ripple { background: rgba(194,208,232,.07); }
+    @keyframes ripple { to { transform: scale(6); opacity: 0; } }
+
+    /* ── Animated wave at seam ── */
+    #wave {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      top: calc(50vh - 40px);
+      top: calc(50dvh - 40px);
+      z-index: 10;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ── Wordmark ── */
+    #wordmark {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'PicNic', serif;
+      font-weight: 400;
+      font-size: 22px;
+      letter-spacing: .05em;
+      color: #a0a09a;
+      opacity: .35;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 100;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px clamp(16px, 4vw, 48px);
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      z-index: 200;
+    }
+    footer a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .12em;
+      color: rgba(160,160,154,.28);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    footer a:hover { color: rgba(160,160,154,.7); }
+
+    /* ── Desktop cursor (fine pointer only) ── */
     @media (pointer: fine) {
+      .half, footer a { cursor: none; }
       #cursor {
         position: fixed;
-        width: 5px;
-        height: 5px;
+        width: 5px; height: 5px;
         background: #a0a09a;
         border-radius: 50%;
         pointer-events: none;
         transform: translate(-50%,-50%);
         z-index: 1000;
-        transition: width .2s, height .2s, background .2s, border-radius .2s;
+        transition: width .2s, height .2s, border .2s, background .2s;
       }
-      #cursor.on-systems {
+      #cursor.on-sys {
         width: 36px; height: 36px;
         background: transparent;
         border: 1px solid rgba(26,21,16,.3);
-        border-radius: 50%;
       }
-      #cursor.on-sound {
+      #cursor.on-snd {
         width: 36px; height: 36px;
         background: transparent;
-        border: 1px solid rgba(194,208,232,.45);
-        border-radius: 50%;
+        border: 1px solid rgba(194,208,232,.4);
       }
-      .label { cursor: none; }
-      footer a { cursor: none; }
     }
-
-    /* Labels */
-    .label {
-      position: fixed;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(38px, 9vw, 118px);
-      letter-spacing: -0.03em;
-      line-height: 1;
-      will-change: transform;
-      cursor: pointer;
-      user-select: none;
-      transition: opacity .4s;
-      opacity: .72;
-      z-index: 100;
-    }
-    .label:hover { opacity: 1; }
-
-    /* SYSTEMS - oben, dunkel auf hell */
-    #lbl-systems {
-      top: 9vh;
-      left: 6vw;
-      color: #1A1510;
-    }
-
-    /* SOUND - unten, hell auf dunkel */
-    #lbl-sound {
-      bottom: 11vh;
-      right: 5vw;
-      color: #c2d0e8;
-      text-align: right;
-    }
-
-    /* Wordmark */
-    #wordmark {
-      position: fixed;
-      bottom: 2.8vh;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      letter-spacing: .2em;
-      color: #a0a09a;
-      opacity: .3;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 100;
-    }
-    #wordmark::after {
-      content: '_';
-      animation: blink 1.2s step-end infinite;
-    }
-
-    /* Footer */
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      padding: 12px clamp(20px, 4vw, 48px);
-      display: flex;
-      justify-content: flex-end;
-      gap: 24px;
-      z-index: 800;
-    }
-    footer a {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .12em;
-      color: rgba(160,160,154,.35);
-      text-decoration: none;
-      cursor: pointer;
-      transition: color .3s;
-    }
-    footer a:hover { color: rgba(160,160,154,.75); }
 
     @keyframes blink {
       0%, 100% { opacity: 1; }
@@ -155,8 +181,19 @@
 
 <div id="cursor"></div>
 
-<div id="lbl-systems" class="label">SYSTEMS</div>
-<div id="lbl-sound" class="label">SOUND</div>
+<div class="half half--day" id="sys">
+  <span class="word" id="lbl-systems">SYSTEMS</span>
+</div>
+
+<!-- Wave SVG covers the seam, animates via JS -->
+<svg id="wave" viewBox="0 0 1000 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path id="wave-top" fill="#e0d4b8"/>
+  <path id="wave-bot" fill="#04080f"/>
+</svg>
+
+<div class="half half--night" id="snd">
+  <span class="word" id="lbl-sound">SOUND</span>
+</div>
 
 <div id="wordmark">flui.</div>
 
@@ -166,63 +203,78 @@
 </footer>
 
 <script>
-  const cursor   = document.getElementById('cursor');
+  const sys      = document.getElementById('sys');
+  const snd      = document.getElementById('snd');
   const lblSys   = document.getElementById('lbl-systems');
   const lblSound = document.getElementById('lbl-sound');
+  const waveTop  = document.getElementById('wave-top');
+  const waveBot  = document.getElementById('wave-bot');
+  const cursor   = document.getElementById('cursor');
 
-  let mx = 0, my = 0, sx = 0, sy = 0;
-  let lastTime = performance.now();
-  
-  const isMobile = window.matchMedia("(pointer: coarse)").matches;
-  
-  if (isMobile) {
-    // Mobile: Automatische subtile Animation
-    function mobileLoop(now) {
-      const t = now * 0.0003;
-      mx = Math.sin(t) * 0.3;
-      my = Math.cos(t * 0.7) * 0.2;
-      
-      sx += (mx - sx) * .045;
-      sy += (my - sy) * .045;
-      
-      lblSys.style.transform   = `translate(${sx*22}px,${sy*14}px)`;
-      lblSound.style.transform = `translate(${-sx*16}px,${-sy*10}px)`;
-      
-      requestAnimationFrame(mobileLoop);
+  /* ── Animated wave ── */
+  let wt = 0;
+  (function animWave() {
+    wt += 0.006;
+    const N = 120;
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const x = (i / N) * 1000;
+      const y = 40
+        + Math.sin((i / N) * Math.PI * 2 + wt) * 10
+        + Math.sin((i / N) * Math.PI * 3.7 + wt * 1.4) * 4;
+      pts.push([x.toFixed(1), y.toFixed(1)]);
     }
-    requestAnimationFrame(mobileLoop);
-  } else {
-    // Desktop: Mouse-tracking
+    const line = pts.map(([x, y]) => `L${x},${y}`).join('');
+    const y0 = pts[0][1], yN = pts[N][1];
+    waveTop.setAttribute('d', `M0,0 L0,${y0}${line}L1000,0 Z`);
+    waveBot.setAttribute('d', `M0,80 L0,${y0}${line}L1000,80 Z`);
+    requestAnimationFrame(animWave);
+  })();
+
+  /* ── Touch ripple ── */
+  function addRipple(el, e) {
+    const rect = el.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const cx   = (e.clientX ?? rect.left + rect.width  / 2) - rect.left;
+    const cy   = (e.clientY ?? rect.top  + rect.height / 2) - rect.top;
+    const r    = document.createElement('span');
+    r.className = 'ripple';
+    r.style.cssText = `width:${size}px;height:${size}px;left:${cx - size/2}px;top:${cy - size/2}px`;
+    el.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+  }
+
+  sys.addEventListener('pointerdown', e => addRipple(sys, e));
+  snd.addEventListener('pointerdown', e => addRipple(snd, e));
+
+  /* ── Navigation ── */
+  sys.addEventListener('click', () => { sys.style.opacity = '.6'; setTimeout(() => location.href = 'systems.html', 180); });
+  snd.addEventListener('click', () => { snd.style.opacity = '.6'; setTimeout(() => location.href = 'sound.html',   180); });
+
+  /* ── Desktop: parallax + cursor ── */
+  if (window.matchMedia('(pointer: fine)').matches) {
+    let mx = 0, my = 0, sx = 0, sy = 0;
+
     window.addEventListener('mousemove', e => {
-      if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top  = e.clientY + 'px';
-      }
-      mx = (e.clientX / window.innerWidth  - .5) * 2;
-      my = (e.clientY / window.innerHeight - .5) * 2;
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      mx = (e.clientX / innerWidth  - .5) * 2;
+      my = (e.clientY / innerHeight - .5) * 2;
     });
 
-    if (cursor) {
-      lblSys.addEventListener('mouseenter',   () => cursor.classList.add('on-systems'));
-      lblSys.addEventListener('mouseleave',   () => cursor.classList.remove('on-systems'));
-      lblSound.addEventListener('mouseenter', () => cursor.classList.add('on-sound'));
-      lblSound.addEventListener('mouseleave', () => cursor.classList.remove('on-sound'));
-    }
+    sys.addEventListener('mouseenter', () => cursor.classList.add('on-sys'));
+    sys.addEventListener('mouseleave', () => cursor.classList.remove('on-sys'));
+    snd.addEventListener('mouseenter', () => cursor.classList.add('on-snd'));
+    snd.addEventListener('mouseleave', () => cursor.classList.remove('on-snd'));
 
-    function loop(now) {
-      const dt = now - lastTime; lastTime = now;
+    (function loop() {
       sx += (mx - sx) * .045;
       sy += (my - sy) * .045;
       lblSys.style.transform   = `translate(${sx*22}px,${sy*14}px)`;
       lblSound.style.transform = `translate(${-sx*16}px,${-sy*10}px)`;
       requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
+    })();
   }
-
-  // Click handlers
-  lblSys.addEventListener('click',   () => window.location.href = 'systems.html');
-  lblSound.addEventListener('click', () => window.location.href = 'sound.html');
 </script>
 </body>
 </html>

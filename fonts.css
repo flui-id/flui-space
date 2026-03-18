@@ -1,5 +1,15 @@
 /* Self-hosted fonts — no external requests, GDPR compliant */
 
+/* PicNic — Velvetyne Type Foundry (https://velvetyne.fr/) */
+@font-face {
+  font-family: 'PicNic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/PicNic.woff2') format('woff2'),
+       url('fonts/PicNic.woff')  format('woff');
+}
+
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: italic;
