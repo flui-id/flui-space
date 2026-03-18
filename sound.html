@@ -17,6 +17,9 @@
 
     body {
       background: var(--bg);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 13px;
@@ -26,6 +29,18 @@
       cursor: none;
       max-width: 680px;
     }
+
+    /* Dark overlay over the background image */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(4,8,15,.82);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #cursor, .back, h1, p, .link-line, footer { position: relative; z-index: 1; }
 
     body::after {
       content: '';
@@ -153,6 +168,10 @@
 </footer>
 
 <script>
+  // Random abstract/fluid background from Unsplash (changes on each reload)
+  const url = `https://source.unsplash.com/random/1920x1080/?abstract,fluid,dark&t=${Date.now()}`;
+  document.body.style.backgroundImage = `url('${url}')`;
+
   const cursor = document.getElementById('cursor');
   document.querySelectorAll('a').forEach(a => {
     a.addEventListener('mouseenter', () => cursor.classList.add('on-link'));
