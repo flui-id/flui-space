@@ -48,38 +48,59 @@
       z-index: 1;
     }
 
+    /* ── Brand blocks ── */
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(10px, 2vw, 18px);
+      position: relative;
+      z-index: 2;
+      user-select: none;
+    }
+
+    .brand-logo {
+      width:  clamp(44px, 9vw, 72px);
+      height: clamp(44px, 9vw, 72px);
+    }
+
     /* ── Word labels ── */
     .word {
-      font-size: clamp(56px, 16vw, 160px);
       line-height: 1;
       user-select: none;
       position: relative;
       z-index: 2;
-      transition: opacity .35s, transform .35s cubic-bezier(.34,1.56,.64,1);
-      will-change: transform;
     }
 
     .half--day .word {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      letter-spacing: -0.04em;
+      font-family: 'CirrusCumulus', sans-serif;
+      font-weight: 400;
+      font-size: clamp(30px, 8vw, 82px);
+      letter-spacing: -0.01em;
       color: #1A1510;
-      opacity: .72;
+      opacity: .78;
     }
 
     .half--night .word {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-style: italic;
-      letter-spacing: 0.04em;
+      font-family: 'PicNic', serif;
+      font-weight: 400;
+      font-size: clamp(22px, 5.5vw, 58px);
+      letter-spacing: 0.01em;
       color: #c2d0e8;
-      opacity: .72;
+      opacity: .78;
     }
 
-    .half--day:hover   .word,
-    .half--day:active  .word  { opacity: 1; transform: scale(1.04); }
-    .half--night:hover  .word,
-    .half--night:active .word { opacity: 1; transform: scale(1.04); }
+    /* CSS vars for logo */
+    :root { --copper: #C87533; }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.7; }
+    }
 
     /* ── Touch ripple ── */
     .ripple {
@@ -165,7 +186,38 @@
 <div id="cursor"></div>
 
 <div class="half half--day" id="sys">
-  <span class="word" id="lbl-systems">SYSTEMS</span>
+  <div class="brand-block">
+    <svg class="brand-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <g opacity="0.18">
+        <line x1="12" y1="8" x2="12" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="24" y1="8" x2="24" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="36" y1="8" x2="36" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="12" x2="40" y2="12" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="24" x2="40" y2="24" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="36" x2="40" y2="36" stroke="#1A1510" stroke-width="0.4"/>
+      </g>
+      <g style="transform-origin:center;animation:rotate 2.5s linear infinite">
+        <circle cx="24" cy="24" r="8" fill="none" stroke="#C87533" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="50" stroke-dashoffset="50">
+          <animate attributeName="stroke-dashoffset" values="50;0;50" dur="3s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="#C87533;#C87533;rgba(26,21,16,.35);rgba(26,21,16,.35);rgba(26,21,16,.25);rgba(26,21,16,.25)" dur="6s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <g style="transform-origin:center;animation:rotate 3.5s linear infinite;transform:rotate(120deg)">
+        <circle cx="24" cy="24" r="13" fill="none" stroke="rgba(26,21,16,.35)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="82" stroke-dashoffset="82">
+          <animate attributeName="stroke-dashoffset" values="82;0;82" dur="3s" begin="0.5s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="rgba(26,21,16,.35);rgba(26,21,16,.35);rgba(26,21,16,.25);rgba(26,21,16,.25);#C87533;#C87533" dur="6s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <g style="transform-origin:center;animation:rotate 4.5s linear infinite;transform:rotate(240deg)">
+        <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(26,21,16,.25)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113">
+          <animate attributeName="stroke-dashoffset" values="113;0;113" dur="3s" begin="1s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="rgba(26,21,16,.25);rgba(26,21,16,.25);#C87533;#C87533;rgba(26,21,16,.35);rgba(26,21,16,.35)" dur="6s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <circle cx="24" cy="24" r="1.8" fill="#C87533" opacity="0.5" style="animation:pulse 3s ease-in-out infinite"/>
+    </svg>
+    <span class="word" id="lbl-systems">aflorestamos</span>
+  </div>
 </div>
 
 <!-- Wave SVG covers the seam, animates via JS -->
@@ -175,7 +227,7 @@
 </svg>
 
 <div class="half half--night" id="snd">
-  <span class="word" id="lbl-sound">SOUND</span>
+  <span class="word" id="lbl-sound">fluid identities</span>
 </div>
 
 <footer>
@@ -232,30 +284,50 @@
   sys.addEventListener('click', () => { sys.style.opacity = '.6'; setTimeout(() => location.href = 'systems.html', 180); });
   snd.addEventListener('click', () => { snd.style.opacity = '.6'; setTimeout(() => location.href = 'sound.html',   180); });
 
-  /* ── Desktop: parallax + cursor ── */
+  /* ── Desktop cursor ── */
   if (window.matchMedia('(pointer: fine)').matches) {
-    let mx = 0, my = 0, sx = 0, sy = 0;
-
     window.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top  = e.clientY + 'px';
-      mx = (e.clientX / innerWidth  - .5) * 2;
-      my = (e.clientY / innerHeight - .5) * 2;
     });
-
     sys.addEventListener('mouseenter', () => cursor.classList.add('on-sys'));
     sys.addEventListener('mouseleave', () => cursor.classList.remove('on-sys'));
     snd.addEventListener('mouseenter', () => cursor.classList.add('on-snd'));
     snd.addEventListener('mouseleave', () => cursor.classList.remove('on-snd'));
-
-    (function loop() {
-      sx += (mx - sx) * .045;
-      sy += (my - sy) * .045;
-      lblSys.style.transform   = `translate(${sx*22}px,${sy*14}px)`;
-      lblSound.style.transform = `translate(${-sx*16}px,${-sy*10}px)`;
-      requestAnimationFrame(loop);
-    })();
   }
+
+  /* ── Per-character floating on "fluid identities" only ── */
+  const floatChars = [];
+  const text = lblSound.textContent;
+  lblSound.innerHTML = '';
+  for (const ch of text) {
+    if (ch === ' ') {
+      lblSound.appendChild(document.createTextNode(' '));
+    } else {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      s.style.display = 'inline-block';
+      lblSound.appendChild(s);
+      floatChars.push({
+        el: s,
+        ax: 4 + Math.random() * 6,
+        ay: 5 + Math.random() * 8,
+        fx: 0.00015 + Math.random() * 0.00022,
+        fy: 0.00015 + Math.random() * 0.00022,
+        px: Math.random() * Math.PI * 2,
+        py: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  (function floatLoop(t) {
+    for (const c of floatChars) {
+      const x = c.ax * Math.sin(t * c.fx + c.px);
+      const y = c.ay * Math.sin(t * c.fy + c.py);
+      c.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+    }
+    requestAnimationFrame(floatLoop);
+  })();
 </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 /* Self-hosted fonts — no external requests, GDPR compliant */
 
-/* PicNic — Velvetyne Type Foundry (https://velvetyne.fr/) */
+/* PicNic — Mariel Nils, distributed by velvetyne.fr */
 @font-face {
   font-family: 'PicNic';
   font-style: normal;
@@ -8,6 +8,15 @@
   font-display: swap;
   src: url('fonts/PicNic.woff2') format('woff2'),
        url('fonts/PicNic.woff')  format('woff');
+}
+
+/* CirrusCumulus — Clara Sambot, distributed by velvetyne.fr */
+@font-face {
+  font-family: 'CirrusCumulus';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/CirrusCumulus.woff') format('woff');
 }
 
 @font-face {
