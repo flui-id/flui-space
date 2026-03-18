@@ -28,6 +28,7 @@
       padding: clamp(32px, 7vw, 80px) clamp(24px, 7vw, 88px);
       cursor: none;
       max-width: 680px;
+      overflow-x: hidden;
     }
 
     /* Dark overlay over the background image */
@@ -203,6 +204,24 @@
     cursor.style.left = e.clientX + 'px';
     cursor.style.top  = e.clientY + 'px';
   });
+
+  // Fluid floating — each element drifts independently
+  const floaters = [
+    { el: document.querySelector('.back'),      ax:  5, ay:  7, fx: 0.00021, fy: 0.00029, px: 0.0, py: 1.1 },
+    { el: document.querySelector('h1'),         ax: 14, ay: 10, fx: 0.00016, fy: 0.00021, px: 0.7, py: 2.4 },
+    { el: document.querySelector('p'),          ax:  9, ay: 13, fx: 0.00027, fy: 0.00018, px: 1.5, py: 0.3 },
+    { el: document.querySelector('.link-line'), ax:  7, ay:  9, fx: 0.00019, fy: 0.00025, px: 2.2, py: 3.1 },
+    { el: document.querySelector('footer'),     ax:  4, ay:  5, fx: 0.00023, fy: 0.00031, px: 3.5, py: 1.8 },
+  ];
+
+  (function floatLoop(t) {
+    for (const f of floaters) {
+      const x = f.ax * Math.sin(t * f.fx + f.px);
+      const y = f.ay * Math.sin(t * f.fy + f.py);
+      f.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+    }
+    requestAnimationFrame(floatLoop);
+  })();
 </script>
 </body>
 </html>
