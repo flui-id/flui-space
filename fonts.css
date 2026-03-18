@@ -53,6 +53,16 @@
   font-display: swap;
   src: url('WOFF/bianzhidai-Brush.woff') format('woff');
 }
+
+/* Vagra — distributed by velvetyne.fr */
+@font-face {
+  font-family: 'Vagra';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('WOFF/vagra-regular.woff2') format('woff2'),
+       url('WOFF/vagra-regular.woff') format('woff');
+}
 @font-face {
   font-family: 'BianZhiDaiGrid';
   font-style: normal;
