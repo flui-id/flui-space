@@ -5,14 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>flui.</title>
   <link rel="stylesheet" href="fonts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #080808;
+      background: #e0d4b8; /* Tag/warm oben */
       height: 100vh;
       overflow: hidden;
-      cursor: none;
+      position: relative;
+    }
+    
+    /* Harter Übergang - untere Hälfte Nacht */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50vh;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #04080f; /* Nacht/kalt unten */
+      z-index: 1;
     }
 
     /* Scanlines */
@@ -29,32 +44,36 @@
       z-index: 900;
     }
 
-    /* Custom cursor */
-    #cursor {
-      position: fixed;
-      width: 5px;
-      height: 5px;
-      background: #a0a09a;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      z-index: 1000;
-      transition: width .2s, height .2s, background .2s, border-radius .2s;
-    }
-    #cursor.on-sound {
-      width: 36px; height: 36px;
-      background: transparent;
-      border: 1px solid rgba(194,208,232,.45);
-      border-radius: 50%;
-    }
-    #cursor.on-systems {
-      width: 36px; height: 36px;
-      background: transparent;
-      border: 1px solid rgba(224,212,184,.45);
-      border-radius: 50%;
+    /* Custom cursor (desktop only) */
+    @media (pointer: fine) {
+      #cursor {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: #a0a09a;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%,-50%);
+        z-index: 1000;
+        transition: width .2s, height .2s, background .2s, border-radius .2s;
+      }
+      #cursor.on-systems {
+        width: 36px; height: 36px;
+        background: transparent;
+        border: 1px solid rgba(26,21,16,.3);
+        border-radius: 50%;
+      }
+      #cursor.on-sound {
+        width: 36px; height: 36px;
+        background: transparent;
+        border: 1px solid rgba(194,208,232,.45);
+        border-radius: 50%;
+      }
+      .label { cursor: none; }
+      footer a { cursor: none; }
     }
 
-    /* Labels — same font, different color */
+    /* Labels */
     .label {
       position: fixed;
       font-family: 'Syne', sans-serif;
@@ -63,38 +82,27 @@
       letter-spacing: -0.03em;
       line-height: 1;
       will-change: transform;
-      cursor: none;
+      cursor: pointer;
       user-select: none;
       transition: opacity .4s;
       opacity: .72;
+      z-index: 100;
     }
     .label:hover { opacity: 1; }
 
-    #lbl-sound {
+    /* SYSTEMS - oben, dunkel auf hell */
+    #lbl-systems {
       top: 9vh;
       left: 6vw;
-      color: #c2d0e8; /* cold — sound world */
+      color: #1A1510;
     }
 
-    #lbl-systems {
+    /* SOUND - unten, hell auf dunkel */
+    #lbl-sound {
       bottom: 11vh;
       right: 5vw;
-      color: #e0d4b8; /* warm — systems world */
+      color: #c2d0e8;
       text-align: right;
-    }
-
-    /* Logo mark */
-    #logo-wrap {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      will-change: transform;
-    }
-    #logo-svg {
-      display: block;
-      width: 150px;
-      height: 150px;
-      transform: translate(-50%, -50%);
     }
 
     /* Wordmark */
@@ -110,13 +118,14 @@
       opacity: .3;
       pointer-events: none;
       white-space: nowrap;
+      z-index: 100;
     }
     #wordmark::after {
       content: '_';
       animation: blink 1.2s step-end infinite;
     }
 
-    /* Footer — legal links */
+    /* Footer */
     footer {
       position: fixed;
       bottom: 0;
@@ -133,7 +142,7 @@
       letter-spacing: .12em;
       color: rgba(160,160,154,.35);
       text-decoration: none;
-      cursor: none;
+      cursor: pointer;
       transition: color .3s;
     }
     footer a:hover { color: rgba(160,160,154,.75); }
@@ -148,39 +157,8 @@
 
 <div id="cursor"></div>
 
-<div id="lbl-sound" class="label">SOUND</div>
-
-<div id="logo-wrap">
-  <svg id="logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <marker id="arr" markerWidth="9" markerHeight="7"
-              refX="9" refY="3.5" orient="auto"
-              markerUnits="userSpaceOnUse">
-        <polygon points="0 0, 9 3.5, 0 7" fill="#a0a09a" opacity=".7"/>
-      </marker>
-    </defs>
-    <!-- Structural triangle -->
-    <polygon points="100,28 158.9,130 41.1,130"
-             stroke="#a0a09a" stroke-width=".4"
-             fill="none" stroke-dasharray="2 7" opacity=".2"/>
-    <!-- Flow arcs -->
-    <path d="M 121.1,32.8 A 68,68 0 0,1 166.5,111.1"
-          stroke="#a0a09a" stroke-width="1.4" stroke-linecap="round"
-          marker-end="url(#arr)" opacity=".65"/>
-    <path d="M 145.1,147.1 A 68,68 0 0,1 54.9,147.1"
-          stroke="#a0a09a" stroke-width="1.4" stroke-linecap="round"
-          marker-end="url(#arr)" opacity=".65"/>
-    <path d="M 33.5,111.1 A 68,68 0 0,1 78.9,32.8"
-          stroke="#a0a09a" stroke-width="1.4" stroke-linecap="round"
-          marker-end="url(#arr)" opacity=".65"/>
-    <!-- Vertex nodes -->
-    <circle cx="100"   cy="28"  r="3" fill="#a0a09a" opacity=".75"/>
-    <circle cx="158.9" cy="130" r="3" fill="#a0a09a" opacity=".75"/>
-    <circle cx="41.1"  cy="130" r="3" fill="#a0a09a" opacity=".75"/>
-  </svg>
-</div>
-
 <div id="lbl-systems" class="label">SYSTEMS</div>
+<div id="lbl-sound" class="label">SOUND</div>
 
 <div id="wordmark">flui.</div>
 
@@ -191,44 +169,62 @@
 
 <script>
   const cursor   = document.getElementById('cursor');
-  const logoWrap = document.getElementById('logo-wrap');
-  const lblSound = document.getElementById('lbl-sound');
   const lblSys   = document.getElementById('lbl-systems');
+  const lblSound = document.getElementById('lbl-sound');
 
   let mx = 0, my = 0, sx = 0, sy = 0;
   let lastTime = performance.now();
+  
+  const isMobile = window.matchMedia("(pointer: coarse)").matches;
+  
+  if (isMobile) {
+    // Mobile: Automatische subtile Animation
+    function mobileLoop(now) {
+      const t = now * 0.0003;
+      mx = Math.sin(t) * 0.3;
+      my = Math.cos(t * 0.7) * 0.2;
+      
+      sx += (mx - sx) * .045;
+      sy += (my - sy) * .045;
+      
+      lblSys.style.transform   = `translate(${sx*22}px,${sy*14}px)`;
+      lblSound.style.transform = `translate(${-sx*16}px,${-sy*10}px)`;
+      
+      requestAnimationFrame(mobileLoop);
+    }
+    requestAnimationFrame(mobileLoop);
+  } else {
+    // Desktop: Mouse-tracking
+    window.addEventListener('mousemove', e => {
+      if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      }
+      mx = (e.clientX / window.innerWidth  - .5) * 2;
+      my = (e.clientY / window.innerHeight - .5) * 2;
+    });
 
-  window.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top  = e.clientY + 'px';
-    mx = (e.clientX / window.innerWidth  - .5) * 2;
-    my = (e.clientY / window.innerHeight - .5) * 2;
-  });
+    if (cursor) {
+      lblSys.addEventListener('mouseenter',   () => cursor.classList.add('on-systems'));
+      lblSys.addEventListener('mouseleave',   () => cursor.classList.remove('on-systems'));
+      lblSound.addEventListener('mouseenter', () => cursor.classList.add('on-sound'));
+      lblSound.addEventListener('mouseleave', () => cursor.classList.remove('on-sound'));
+    }
 
-  lblSound.addEventListener('mouseenter', () => cursor.classList.add('on-sound'));
-  lblSound.addEventListener('mouseleave', () => cursor.classList.remove('on-sound'));
-  lblSys.addEventListener('mouseenter',   () => cursor.classList.add('on-systems'));
-  lblSys.addEventListener('mouseleave',   () => cursor.classList.remove('on-systems'));
-
-  lblSound.addEventListener('click', () => window.location.href = 'sound.html');
-  lblSys.addEventListener('click',   () => window.location.href = 'systems.html');
-
-  // Footer links — restore default cursor
-  document.querySelectorAll('footer a').forEach(a => {
-    a.style.cursor = 'pointer';
-  });
-
-  function loop(now) {
-    const dt = now - lastTime; lastTime = now;
-    sx += (mx - sx) * .045;
-    sy += (my - sy) * .045;
-    lblSound.style.transform  = `translate(${sx*22}px,${sy*14}px)`;
-    lblSys.style.transform    = `translate(${-sx*16}px,${-sy*10}px)`;
-    logoWrap.style.transform  =
-      `translate(calc(-50% + ${sx*6}px),calc(-50% + ${sy*6}px))`;
+    function loop(now) {
+      const dt = now - lastTime; lastTime = now;
+      sx += (mx - sx) * .045;
+      sy += (my - sy) * .045;
+      lblSys.style.transform   = `translate(${sx*22}px,${sy*14}px)`;
+      lblSound.style.transform = `translate(${-sx*16}px,${-sy*10}px)`;
+      requestAnimationFrame(loop);
+    }
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
+
+  // Click handlers
+  lblSys.addEventListener('click',   () => window.location.href = 'systems.html');
+  lblSound.addEventListener('click', () => window.location.href = 'sound.html');
 </script>
 </body>
 </html>

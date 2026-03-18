@@ -9,10 +9,11 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg:   #090704;
-      --text: #e0d4b8;
-      --dim:  rgba(224,212,184,.35);
-      --acc:  rgba(224,212,184,.07);
+      --bg:   #F5EFE3;
+      --text: #1A1510;
+      --dim:  rgba(26,21,16,.38);
+      --acc:  rgba(26,21,16,.06);
+      --copper: #C87533;
     }
 
     body {
@@ -26,18 +27,23 @@
       cursor: none;
     }
 
-    /* Scanlines */
-    body::after {
-      content: '';
+    /* Background layer: fixed SVG arcs + dot grid */
+    #bg {
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent, transparent 2px,
-        rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px
-      );
+      z-index: 0;
       pointer-events: none;
-      z-index: 900;
+      overflow: hidden;
+    }
+    #bg svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Page content above background */
+    #page {
+      position: relative;
+      z-index: 1;
     }
 
     /* Custom cursor */
@@ -55,7 +61,7 @@
     #cursor.on-link {
       width: 32px; height: 32px;
       background: transparent;
-      border: 1px solid rgba(224,212,184,.4);
+      border: 1px solid rgba(26,21,16,.28);
       border-radius: 50%;
     }
 
@@ -65,7 +71,7 @@
 
     .back {
       display: inline-block;
-      font-size: 11px;
+      font-size: 14px;
       color: var(--dim);
       text-decoration: none;
       letter-spacing: .15em;
@@ -89,16 +95,16 @@
     }
 
     .tagline {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--dim);
-      letter-spacing: .2em;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(26,21,16,.68);
+      letter-spacing: .18em;
       text-transform: uppercase;
     }
 
     hr {
       border: none;
-      border-top: 1px solid rgba(224,212,184,.1);
+      border-top: 1px solid rgba(26,21,16,.1);
       margin: clamp(24px, 4vh, 40px) 0;
     }
 
@@ -110,15 +116,48 @@
       color: var(--dim);
       text-transform: uppercase;
       margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .label-icon {
+      width: 28px;
+      height: 28px;
+      opacity: 0.35;
+    }
+    .label-icon path,
+    .label-icon circle,
+    .label-icon line {
+      stroke: var(--text);
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .label-icon .copper-accent {
+      stroke: var(--copper);
+      opacity: 1;
+    }
+    .label-icon .copper-accent[fill] {
+      fill: var(--copper);
+      opacity: 0.7;
     }
 
     p {
       font-weight: 300;
-      color: rgba(224,212,184,.75);
+      color: rgba(26,21,16,.72);
       max-width: 56ch;
       font-style: italic;
     }
     p + p { margin-top: 12px; }
+    p a {
+      color: #5A4A3A;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: none;
+    }
+    p a:hover { color: #3D2F1F; }
 
     .cmd-list {
       list-style: none;
@@ -133,18 +172,92 @@
     .cmd-list a::before { content: '> '; color: var(--dim); }
     .cmd-list a:hover   { text-decoration: underline; text-underline-offset: 4px; }
 
-    /* ASCII diagram */
-    .diagram {
+    .work-desc {
       font-size: 11px;
-      line-height: 1.5;
       color: var(--dim);
-      margin-top: 16px;
-      white-space: pre;
+      font-style: italic;
+      margin-top: 4px;
+      padding-left: 16px;
+      line-height: 1.6;
     }
+
+    footer {
+      margin-top: clamp(48px, 10vh, 96px);
+      padding-top: 20px;
+      border-top: 1px solid rgba(26,21,16,.08);
+      display: flex;
+      gap: 24px;
+    }
+    footer a {
+      font-size: 10px;
+      letter-spacing: .12em;
+      color: rgba(26,21,16,.25);
+      text-decoration: none;
+      cursor: none;
+    }
+    footer a:hover { color: rgba(26,21,16,.6); }
 
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50%       { opacity: 0; }
+    }
+
+    @keyframes arc-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes grid-fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    
+    /* Icon animations */
+    @keyframes network-draw {
+      0% { stroke-dashoffset: 100; }
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; r: 1.5; }
+      50% { opacity: 0.7; r: 2; }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes grow {
+      0% { stroke-dashoffset: 60; }
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes draw-line {
+      0% { stroke-dashoffset: 20; }
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes flow-1 {
+      0% { cx: 24; cy: 24; opacity: 0; }
+      20% { opacity: 0.9; }
+      100% { cx: 36; cy: 14; opacity: 0; }
+    }
+    
+    @keyframes flow-2 {
+      0% { cx: 24; cy: 24; opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { cx: 12; cy: 34; opacity: 0; }
+    }
+    
+    @keyframes flow-3 {
+      0% { cx: 36; cy: 14; opacity: 0; }
+      20% { opacity: 0.7; }
+      100% { cx: 36; cy: 34; opacity: 0; }
+    }
+    
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
     }
   </style>
 </head>
@@ -152,20 +265,176 @@
 
 <div id="cursor"></div>
 
+<!-- Animated background: circles draw themselves, dot grid fades in -->
+<div id="bg">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+       xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Dot grid pattern -->
+      <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.9" fill="rgba(26,21,16,.09)"/>
+      </pattern>
+    </defs>
+
+    <!-- Dot grid — fades in after circles -->
+    <rect width="100%" height="100%" fill="url(#dots)"
+      opacity="0"
+      style="animation: grid-fade 5s ease-out 5s forwards"/>
+
+    <!-- Arc 1: large, top-right — draws first -->
+    <circle cx="1180" cy="120" r="420"
+      fill="none" stroke="rgba(26,21,16,.07)" stroke-width="0.7"
+      stroke-dasharray="2639" stroke-dashoffset="2639"
+      style="animation: arc-draw 11s cubic-bezier(.4,0,.2,1) 0.4s forwards"/>
+
+    <!-- Arc 2: medium, bottom-left — delayed -->
+    <circle cx="180" cy="800" r="290"
+      fill="none" stroke="rgba(26,21,16,.055)" stroke-width="0.6"
+      stroke-dasharray="1822" stroke-dashoffset="1822"
+      style="animation: arc-draw 9s cubic-bezier(.4,0,.2,1) 2.5s forwards"/>
+
+    <!-- Arc 3: small, mid-right — appears last -->
+    <circle cx="980" cy="520" r="170"
+      fill="none" stroke="rgba(26,21,16,.04)" stroke-width="0.5"
+      stroke-dasharray="1068" stroke-dashoffset="1068"
+      style="animation: arc-draw 7s cubic-bezier(.4,0,.2,1) 4.5s forwards"/>
+  </svg>
+</div>
+
+<div id="page">
+
 <header>
-  <a class="back" href="index.html">← flui.</a>
-  <h1>Jonas Brosch</h1>
-  <div class="tagline">aflorestamos — circular systems</div>
+  <a class="back" href="/">← flui.</a>
+  <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 8px;">
+    <svg id="logo" width="52" height="52" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="cursor: none; transform-origin: center;">
+      <!-- Bronfenbrenner-Modell: Farbwelle wandert durch alle Systeme -->
+      
+      <!-- Karoblatt-Grid im Hintergrund -->
+      <g opacity="0.18">
+        <line x1="12" y1="8" x2="12" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="24" y1="8" x2="24" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="36" y1="8" x2="36" y2="40" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="12" x2="40" y2="12" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="24" x2="40" y2="24" stroke="#1A1510" stroke-width="0.4"/>
+        <line x1="8" y1="36" x2="40" y2="36" stroke="#1A1510" stroke-width="0.4"/>
+      </g>
+      
+      <!-- INNERER KREIS - startet mit Kupfer -->
+      <g style="transform-origin: center; animation: rotate 2.5s linear infinite;">
+        <circle cx="24" cy="24" r="8" 
+                fill="none" 
+                stroke="var(--copper)" 
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-dasharray="50"
+                stroke-dashoffset="50">
+          <animate attributeName="stroke-dashoffset" 
+                   values="50;0;50" 
+                   dur="3s" 
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke" 
+                   values="#C87533;#C87533;rgba(26,21,16,.35);rgba(26,21,16,.35);rgba(26,21,16,.25);rgba(26,21,16,.25)" 
+                   dur="6s"
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- MITTLERER KREIS - startet mit Mittelgrau (2s versetzt) -->
+      <g style="transform-origin: center; animation: rotate 3.5s linear infinite; transform: rotate(120deg);">
+        <circle cx="24" cy="24" r="13" 
+                fill="none" 
+                stroke="rgba(26,21,16,.35)" 
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-dasharray="82"
+                stroke-dashoffset="82">
+          <animate attributeName="stroke-dashoffset" 
+                   values="82;0;82" 
+                   dur="3s"
+                   begin="0.5s"
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke" 
+                   values="rgba(26,21,16,.35);rgba(26,21,16,.35);rgba(26,21,16,.25);rgba(26,21,16,.25);#C87533;#C87533" 
+                   dur="6s"
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- ÄUSSERER KREIS - startet mit Hellgrau (4s versetzt) -->
+      <g style="transform-origin: center; animation: rotate 4.5s linear infinite; transform: rotate(240deg);">
+        <circle cx="24" cy="24" r="18" 
+                fill="none" 
+                stroke="rgba(26,21,16,.25)" 
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-dasharray="113"
+                stroke-dashoffset="113">
+          <animate attributeName="stroke-dashoffset" 
+                   values="113;0;113" 
+                   dur="3s"
+                   begin="1s"
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke" 
+                   values="rgba(26,21,16,.25);rgba(26,21,16,.25);#C87533;#C87533;rgba(26,21,16,.35);rgba(26,21,16,.35)" 
+                   dur="6s"
+                   calcMode="spline"
+                   keySplines="0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1; 0.4 0 0.2 1"
+                   repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- Zentraler Punkt (Kupfer, pulsiert) -->
+      <circle cx="24" cy="24" r="1.8" fill="var(--copper)" opacity="0.5" style="animation: pulse 3s ease-in-out infinite;"/>
+    </svg>
+    <h1 style="margin: 0;">flui</h1>
+  </div>
+  <div style="font-size: clamp(14px, 3vw, 20px); font-weight: 300; margin-top: 0; letter-spacing: 0.05em; font-style: normal;">Circular Systems for lasting change</div>
 </header>
 
 <hr>
 
 <section>
-  <div class="label">// background</div>
+  <div class="label">
+    <svg class="label-icon" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+      <!-- Karoblatt-Grid im Hintergrund -->
+      <g opacity="0.08">
+        <line x1="7" y1="0" x2="7" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="14" y1="0" x2="14" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="21" y1="0" x2="21" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="7" x2="28" y2="7" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="14" x2="28" y2="14" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="21" x2="28" y2="21" stroke="#1A1510" stroke-width="0.3"/>
+      </g>
+      
+      <!-- Network nodes (one with copper accent) -->
+      <circle cx="7" cy="7" r="1.5" class="copper-accent" style="animation: pulse 3s ease-in-out infinite"/>
+      <circle cx="21" cy="7" r="1.5" style="animation: pulse 3s ease-in-out 0.5s infinite"/>
+      <circle cx="7" cy="21" r="1.5" style="animation: pulse 3s ease-in-out 1s infinite"/>
+      <circle cx="21" cy="21" r="1.5" style="animation: pulse 3s ease-in-out 1.5s infinite"/>
+      <!-- Connecting lines (one with copper accent) -->
+      <line x1="7" y1="7" x2="21" y2="7" class="copper-accent" stroke-dasharray="14" style="animation: network-draw 4s ease-out infinite"/>
+      <line x1="21" y1="7" x2="21" y2="21" stroke-dasharray="14" style="animation: network-draw 4s ease-out 0.5s infinite"/>
+      <line x1="21" y1="21" x2="7" y2="21" stroke-dasharray="14" style="animation: network-draw 4s ease-out 1s infinite"/>
+      <line x1="7" y1="21" x2="7" y2="7" stroke-dasharray="14" style="animation: network-draw 4s ease-out 1.5s infinite"/>
+      <line x1="7" y1="7" x2="21" y2="21" stroke-dasharray="20" opacity="0.3" style="animation: network-draw 4s ease-out 2s infinite"/>
+    </svg>
+    // background
+  </div>
   <p>
-    I've spent the last decade working at the intersection of systems thinking,
-    research, design, and institutional coordination — from sociological research
-    under Armin Nassehi to building and running complex multi-stakeholder ecosystems
+    Hey there, my name is Jonas and I've worked the last decade  at the intersection of systems thinking,
+    research, design, and institutional coordination in the Munich: From my studies (Information Systems & Management as well as Sociology
+    under Armin Nassehi), over advising international public and governmental affairs teams on AI,
+    labour, food, and transport policy, to building multi-stakeholder ecosystems
     across culture, policy, and education.
   </p>
   <ul class="cmd-list" style="margin-top: 16px;">
@@ -176,49 +445,154 @@
 <hr>
 
 <section>
-  <div class="label">// what I believe in</div>
+  <div class="label">
+    <svg class="label-icon" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+      <!-- Karoblatt-Grid im Hintergrund -->
+      <g opacity="0.08">
+        <line x1="7" y1="0" x2="7" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="14" y1="0" x2="14" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="21" y1="0" x2="21" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="7" x2="28" y2="7" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="14" x2="28" y2="14" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="21" x2="28" y2="21" stroke="#1A1510" stroke-width="0.3"/>
+      </g>
+      
+      <g style="transform-origin: center; animation: rotate 8s linear infinite;">
+        <!-- Circular arrows (one segment with copper accent) -->
+        <path d="M 14 4 A 10 10 0 0 1 24 14" class="copper-accent" stroke-dasharray="15.7" style="animation: network-draw 3s ease-in-out infinite"/>
+        <path d="M 24 14 L 21 12 M 24 14 L 22 17" class="copper-accent" opacity="0.8"/>
+        
+        <path d="M 24 14 A 10 10 0 0 1 14 24" stroke-dasharray="15.7" style="animation: network-draw 3s ease-in-out 0.75s infinite"/>
+        <path d="M 14 24 L 16 21 M 14 24 L 11 22" opacity="0.6"/>
+        
+        <path d="M 14 24 A 10 10 0 0 1 4 14" stroke-dasharray="15.7" style="animation: network-draw 3s ease-in-out 1.5s infinite"/>
+        <path d="M 4 14 L 7 16 M 4 14 L 6 11" opacity="0.6"/>
+        
+        <path d="M 4 14 A 10 10 0 0 1 14 4" stroke-dasharray="15.7" style="animation: network-draw 3s ease-in-out 2.25s infinite"/>
+        <path d="M 14 4 L 12 7 M 14 4 L 17 6" opacity="0.6"/>
+      </g>
+    </svg>
+    // approach
+  </div>
   <p>
-    Circular economies — systems where nothing is wasted and value flows back
-    to where it was created. The logic of the forest applied to how we produce,
-    distribute, and consume.
+    Circular logic: nothing extracted, nothing wasted. The same principle that
+    governs a forest applies to how institutions communicate, how brands grow,
+    and how teams learn.
   </p>
 </section>
 
 <hr>
 
 <section>
-  <div class="label">// now</div>
+  <div class="label">
+    <svg class="label-icon" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+      <!-- Karoblatt-Grid im Hintergrund -->
+      <g opacity="0.08">
+        <line x1="7" y1="0" x2="7" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="14" y1="0" x2="14" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="21" y1="0" x2="21" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="7" x2="28" y2="7" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="14" x2="28" y2="14" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="21" x2="28" y2="21" stroke="#1A1510" stroke-width="0.3"/>
+      </g>
+      
+      <!-- Triangle plant: base stem (copper accent) -->
+      <line x1="14" y1="24" x2="14" y2="10" class="copper-accent" stroke-dasharray="14" stroke-width="1.5" style="animation: grow 4s ease-out infinite"/>
+      
+      <!-- Left outer edge -->
+      <line x1="14" y1="20" x2="5" y2="5" stroke-dasharray="20" style="animation: grow 4s ease-out 0.3s infinite"/>
+      
+      <!-- Right outer edge -->
+      <line x1="14" y1="20" x2="23" y2="5" stroke-dasharray="20" style="animation: grow 4s ease-out 0.3s infinite"/>
+      
+      <!-- Left inner branch -->
+      <line x1="14" y1="17" x2="9" y2="8" stroke-dasharray="12" opacity="0.6" style="animation: grow 4s ease-out 0.8s infinite"/>
+      
+      <!-- Right inner branch -->
+      <line x1="14" y1="17" x2="19" y2="8" stroke-dasharray="12" opacity="0.6" style="animation: grow 4s ease-out 0.8s infinite"/>
+      
+      <!-- Top point (copper accent) -->
+      <line x1="14" y1="10" x2="14" y2="4" class="copper-accent" stroke-dasharray="6" style="animation: grow 4s ease-out 1.5s infinite"/>
+      <circle cx="14" cy="4" r="1.2" class="copper-accent" style="animation: pulse 3s ease-in-out 2s infinite; fill: var(--copper); fill-opacity: 0.3;"/>
+    </svg>
+    // now
+  </div>
   <p>
-    Together with a friend, I'm building a natural wine project rooted in exactly
-    that logic: connecting soil, producer, and consumer through integrity rather
+    Porto-based. Together with a friend, I'm building a permaculture quinta in
+    Cinfães, northern Portugal — abandoned land becoming a regenerative system
+    with diverse crops, fruit trees, restored buildings. My focus: connecting
+    the natural wine production to Porto's community through integrity rather
     than margin.
   </p>
-  <ul class="cmd-list" style="margin-top: 16px;">
+  <ul class="cmd-list" style="margin-top: 12px;">
     <li><a href="https://www.instagram.com/aflorestamos/" target="_blank" rel="noopener">@aflorestamos — follow the project</a></li>
   </ul>
+  <p style="margin-top: 20px;">
+    Also working in marketing and communications at Colégio Alemão do Porto,
+    building a communications infrastructure around the school's 125th anniversary
+    following the same circular approach.
+  </p>
 </section>
 
 <hr>
 
 <section>
-  <div class="label">// design</div>
+  <div class="label">
+    <svg class="label-icon" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+      <!-- Karoblatt-Grid im Hintergrund -->
+      <g opacity="0.08">
+        <line x1="7" y1="0" x2="7" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="14" y1="0" x2="14" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="21" y1="0" x2="21" y2="28" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="7" x2="28" y2="7" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="14" x2="28" y2="14" stroke="#1A1510" stroke-width="0.3"/>
+        <line x1="0" y1="21" x2="28" y2="21" stroke="#1A1510" stroke-width="0.3"/>
+      </g>
+      
+      <!-- Pencil/pen tilted -->
+      <line x1="8" y1="20" x2="20" y2="8" stroke-width="1.5"/>
+      <path d="M 20 8 L 18 6 L 16 8 L 18 10 Z" fill="rgba(26,21,16,.2)"/>
+      
+      <!-- Line being drawn (copper accent) -->
+      <path d="M 6 22 Q 10 20 14 18 T 22 14" class="copper-accent" stroke-dasharray="20" opacity="0.8" style="animation: draw-line 3s ease-in-out infinite"/>
+      
+      <!-- Small dots appearing along the drawn line (one with copper accent) -->
+      <circle cx="8" cy="21" r="0.8" class="copper-accent" opacity="0" style="animation: pulse 3s ease-in-out infinite; fill: var(--copper);"/>
+      <circle cx="12" cy="19" r="0.8" opacity="0" style="animation: pulse 3s ease-in-out 0.5s infinite"/>
+      <circle cx="16" cy="17" r="0.8" opacity="0" style="animation: pulse 3s ease-in-out 1s infinite"/>
+    </svg>
+    // design
+  </div>
   <p>
-    Interested in working together? Feel free to reach out —
-    <a href="mailto:ola@flui.space">ola@flui.space</a>
+    Interested in working together? —
+    <a href="/cdn-cgi/l/email-protection#80efece1c0e6ecf5e9aef3f0e1e3e5"><span class="__cf_email__" data-cfemail="1e71727f5e78726b77306d6e7f7d7b">[email&#160;protected]</span></a>
   </p>
   <p style="margin-top: 12px;">Selected work:</p>
   <ul class="cmd-list" style="margin-top: 8px;">
-    <li><a href="https://schauhi-films.de" target="_blank" rel="noopener">schauhi-films.de</a></li>
-    <li><a href="https://familienwerk-tegernsee.de" target="_blank" rel="noopener">familienwerk-tegernsee.de</a></li>
+    <li>
+      <a href="https://dsporto.de" target="_blank" rel="noopener">dsporto.de</a>
+      <div class="work-desc">Marketing & communications for Colégio Alemão do Porto's 125th anniversary. Building content infrastructure to support institutional autonomy. (in progress)</div>
+    </li>
+    <li style="margin-top: 14px;">
+      <a href="https://www.instagram.com/wittmann_brueder/" target="_blank" rel="noopener">@wittmann_brueder</a> — logo design<br>
+      <a href="https://schauhi-films.de" target="_blank" rel="noopener">schauhi-films.de</a> — web design
+      <div class="work-desc">Translating an already strong, uncompromising character into visual form — not inventing something new, but anchoring what was there. Used to secure funding for a film production and a TV series. Both completed; team named among Top Newcomers in Bavarian Film.</div>
+    </li>
+    <li style="margin-top: 14px;">
+      <a href="https://familienwerk-tegernsee.de" target="_blank" rel="noopener">familienwerk-tegernsee.de</a>
+      <div class="work-desc">Full rebranding & web — repositioning a traditional family law practice into a cooperative consultancy focused on mediation, telling new stories for families navigating challenging transitions.</div>
+    </li>
   </ul>
 </section>
 
-<footer style="margin-top: clamp(48px, 10vh, 96px); padding-top: 20px; border-top: 1px solid rgba(224,212,184,.08); display: flex; gap: 24px;">
-  <a href="legal.html" style="font-size: 10px; letter-spacing: .12em; color: rgba(224,212,184,.25); text-decoration: none; cursor: none;">Legal Notice</a>
-  <a href="privacy.html" style="font-size: 10px; letter-spacing: .12em; color: rgba(224,212,184,.25); text-decoration: none; cursor: none;">Privacy Policy</a>
+<footer>
+  <a href="legal.html">Legal Notice</a>
+  <a href="privacy.html">Privacy Policy</a>
 </footer>
 
-<script>
+</div><!-- #page -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const cursor = document.getElementById('cursor');
   const links  = document.querySelectorAll('a');
 
@@ -230,6 +604,17 @@
   links.forEach(a => {
     a.addEventListener('mouseenter', () => cursor.classList.add('on-link'));
     a.addEventListener('mouseleave', () => cursor.classList.remove('on-link'));
+  });
+  
+  // Logo interaction: cursor feedback only (animation already built-in)
+  const logo = document.getElementById('logo');
+  
+  logo.addEventListener('mouseenter', () => {
+    cursor.classList.add('on-link');
+  });
+  
+  logo.addEventListener('mouseleave', () => {
+    cursor.classList.remove('on-link');
   });
 </script>
 </body>
